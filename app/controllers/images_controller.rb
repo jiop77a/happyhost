@@ -1,6 +1,9 @@
 class ImagesController < ApplicationController
-  before_action :set_image, only: [:show, :edit, :update, :destroy]
+  # before_action :set_image, only: [:show, :edit, :update, :destroy]
 
+  def silly
+    render plain: "well hello there #{request.remote_ip}"
+  end
   # GET /images
   # GET /images.json
   def index
@@ -24,17 +27,18 @@ class ImagesController < ApplicationController
   # POST /images
   # POST /images.json
   def create
-    @image = Image.new(image_params)
-
-    respond_to do |format|
-      if @image.save
-        format.html { redirect_to @image, notice: 'Image was successfully created.' }
-        format.json { render :show, status: :created, location: @image }
-      else
-        format.html { render :new }
-        format.json { render json: @image.errors, status: :unprocessable_entity }
-      end
-    end
+    render plain: params[:color]
+    # @image = Image.new(image_params)
+    #
+    # respond_to do |format|
+    #   if @image.save
+    #     format.html { redirect_to @image, notice: 'Image was successfully created.' }
+    #     format.json { render :show, status: :created, location: @image }
+    #   else
+    #     format.html { render :new }
+    #     format.json { render json: @image.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # DELETE /images/1
@@ -55,6 +59,6 @@ class ImagesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def image_params
-      params.fetch(:image, {})
+      params.require(:image).permit(:color)
     end
 end

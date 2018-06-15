@@ -21,7 +21,7 @@
     "test": "test"
   },
   "scripts": {
-    "webpack": "webpack --mode development",
+    "webpack": "webpack -w --mode development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
