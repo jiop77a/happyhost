@@ -1,0 +1,18 @@
+html, body, header, h1, h2, p, ul, li,
+button, div, nav, section, form, input, a, label,
+img, option, figure, span, aside, article, strong, hr {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  outline: 0;
+  border: 0;
+  box-sizing: border-box;
+
+  font: inherit;
+  text-align: inherit;
+  text-decoration: inherit;
+  color: inherit;
+
+  background: transparent;
+  list-style: none;
+}
