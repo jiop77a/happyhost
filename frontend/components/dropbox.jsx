@@ -13,14 +13,11 @@ export default class DropBox extends Component {
       this.setState({errors: "please first select a file"});
       return;
     }
-
     let url = `https://api.cloudinary.com/v1_1/dol1mm8bd/auto/upload/`;
-
     let formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", process.env.CLOUDINARY_PRESET);
-    formData.append("tags", ["GalleryChallenge"]);
-
+      formData.append("file", file);
+      formData.append("upload_preset", process.env.CLOUDINARY_PRESET);
+      formData.append("tags", ["GalleryChallenge"]);
     let headers = { "X-Requested-With": "XMLHttpRequest" };
     let onUploadProgress = (pe) => {
       let progress = Math.round(pe.loaded / pe.total * 100);
@@ -53,7 +50,7 @@ export default class DropBox extends Component {
 
   checkImage = async (file) => {
     try {
-      if (file.size > 250000) {
+      if (file.size > 1250000) {
         throw new Error('image is too big');
       }
       if (!['image/jpeg', 'image/gif', 'image/png'].includes(file.type)) {
@@ -81,40 +78,60 @@ export default class DropBox extends Component {
 
 
   render() {
-    
+
     let {progress, errors, preview, file} = this.state;
     let progressClass = progress > 0 ? "progress-bar" : "";
-    let checkErrors = (errors !== "") ? "none" : "inherit";
+    let checkPreview = (preview === "") ? "none" : "inherit";
+    let checkHide = (preview !== "") ? "none" : "inherit";
+
 
     return (
-      <div className="dropzone">
-          <div>{errors}</div>
+      <div className="dropbox">
+        <div className="dropzone">
+          <div className="errors">{errors}</div>
           <img
             className='preview'
-            style={{display: `${checkErrors}`}}
+            style={{display: `${checkPreview}`}}
             src={preview}>
           </img>
-          <div
-            className={progressClass}
-            style={{width: `${progress}vw`}}>
+          <div className="progress-bar-container">
+            <div
+              className="progress-bar"
+              style={{width: `${progress}%`}}>
+            </div>
           </div>
-          <input
-            id="file"
-            type="file"
-            className="inputfile"
-            ref={this.fileInput}
-            onChange={this.handleSubmit}
-            accept={'.jpg, .png, .gif'}
-          />
-          <label htmlFor="file">
-            Upload File
-          </label>
-          <br/>
-          <button
-            onClick={this.sendToCloudinary(file)}>
-            Upload
-          </button>
+          <div
+            className="hide-text"
+            style={{display: `${checkHide}`}}>
+            <div
+              className="drop-text">
+              Drag or Drop Image</div>
+            <img
+              src={"http://res.cloudinary.com/dol1mm8bd/image/upload/v1529293787/k0b6lro6ho266godd4cr.png"}>
+            </img>
+            <div
+              className="drop-text"
+              >Or</div>
+            <input
+              id="file"
+              type="file"
+              className="inputfile"
+              ref={this.fileInput}
+              onChange={this.handleSubmit}
+              accept={'.jpg, .png, .gif'}
+            />
+            <label
+              htmlFor="file">
+              Click to Upload
+            </label>
+          </div>
         </div>
+        <button
+          className='drop-text drop-button'
+          onClick={this.sendToCloudinary(file)}>
+          Upload Image
+        </button>
+      </div>
     );
   }
 }

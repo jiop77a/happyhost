@@ -1,11 +1,67 @@
-.progress-bar {
-  height: 10px;
-  background-color: red;
+.dropbox, .dropzone, .hide-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.colortext {
+.errors {
   color: red;
 }
+
+.hide-text {
+  height: 100%;
+  justify-content: space-around;
+  margin-bottom: 25px;
+  img {
+    margin: 5px 0px;
+  }
+}
+
+.dropzone {
+  background: #FEFEF6;
+  border: 2px solid #1D5F9B;
+  border-radius: 8px;
+  height: 196px;
+  width: 316px;
+  label {
+    text-decoration: underline;
+    color: #1D5F9B;
+  }
+}
+
+.drop-button {
+  height: 51px;
+  width: 198px;
+  text-align: center;
+  margin-top: 20px;
+}
+.progress-bar-container{
+  width: 98%;
+  overflow: hidden;
+  .progress-bar {
+    height: 35px;
+    background-color: red;
+    align-self: flex-start;
+  }
+}
+
+.drop-button {
+  background-image: linear-gradient(-180deg, #76AFD8 0%, #4A90E2 100%);
+  border: 2px solid #1D5F9B;
+  border-radius: 8px;
+  color: #FFFFFF;
+  &:hover {
+    cursor: pointer;
+    background-image: #1D5F9B;
+  }
+}
+
+.drop-text, .dropzone label {
+  font-family: Tahoma;
+  font-weight: bold;
+  font-size: 14px;
+}
+
 
 .inputfile {
   width: 0.1px;
@@ -17,19 +73,11 @@
 }
 
 .inputfile + label {
-    font-size: 1.25em;
-    font-weight: 700;
-    color: white;
-    background-color: black;
     display: inline-block;
     cursor: pointer;
 }
 
-.inputfile:focus + label,
-.inputfile + label:hover {
-    background-color: red;
-}
-
 .preview {
-  width: 100px;
+  height: 180px;
+  margin-top: 10px;
 }

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {createImage} from '../util/imag_util';
-import Dropbox from './dropbox';
-// import {Image, CloudinaryContext} from 'cloudinary-react';
+import Main from './main';
+
 
 const Root = () => {
   // createImage()
@@ -12,8 +12,11 @@ const Root = () => {
 
   return (
     <div>
-      <Dropbox/>
-      {`Gallery goes here`}
+      <nav>
+        <img src='https://res.cloudinary.com/dol1mm8bd/image/upload/v1529290873/qgdfes0qrx5vtmuevzzj.png'></img>
+        <div>Happy Host</div>
+      </nav>
+      <Main/>
     </div>
   );
 };
