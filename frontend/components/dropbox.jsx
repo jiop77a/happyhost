@@ -1,9 +1,9 @@
-/*global cloudinary*/
+/*global Promise*/
 import React, { Component } from 'react';
 import axios from 'axios';
 
 export default class DropBox extends Component {
-  state = {progress: 0};
+  state = {progress: 0, errors: ""};
 
   fileInput = React.createRef();
   alertText = React.createRef();
@@ -29,8 +29,48 @@ export default class DropBox extends Component {
     });
   }
 
+  loadImage(url) {
+    return new Promise((resolve, reject) => {
+      let img = new Image();
+      img.addEventListener('load', e => resolve(img));
+      img.src = url;
+    });
+  }
+
+  checkDimensions = async (file) => {
+    let url = window.URL.createObjectURL(file);
+    let img = await this.loadImage(url);
+    let height = img.naturalHeight;
+    let width = img.naturalWidth;
+    return height < 1000 && width < 1000;
+  }
+
+  checkImage = async (file) => {
+    try {
+      if (file.size > 250000) {
+        throw new Error('image is too big');
+      }
+      if (!['image/jpeg', 'image/gif', 'image/png'].includes(file.type)) {
+        throw new Error('image is not the right type');
+      }
+      let dimensions = await this.checkDimensions(file);
+      if (!dimensions) {
+        throw new Error('height and width must be less than 1000px');
+      }
+    } catch (err) {
+      return err.message;
+    }
+    return false;
+  }
+
   handleSubmit = (e) => {
-    this.sendToCloudinary(this.fileInput.current.files[0]);
+    let file = this.fileInput.current.files[0];
+    console.log(file);
+    console.log(`file is ${file.size} large`);
+    this.checkImage(file).then(errors => {
+        if (errors) {this.setState({errors});}
+        else { this.sendToCloudinary(file); }
+    });
   }
 
   componentDidMount() {
@@ -40,11 +80,12 @@ export default class DropBox extends Component {
 
 
   render() {
-    let {progress} = this.state;
+    let {progress, errors} = this.state;
     let progressClass = progress > 0 ? "progress-bar" : "";
 
     return (
       <div className="dropzone">
+          <div>{errors}</div>
           <div
             className={progressClass}
             style={{width: `${progress}vw`}}>
@@ -55,7 +96,7 @@ export default class DropBox extends Component {
             className="inputfile"
             ref={this.fileInput}
             onChange={this.handleSubmit}
-            accept={'.jpg, .png'}
+            accept={'.jpg, .png, .gif'}
           />
           <label htmlFor="file">
             Upload File
