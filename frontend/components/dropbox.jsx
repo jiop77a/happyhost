@@ -3,12 +3,17 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 export default class DropBox extends Component {
-  state = {progress: 0, errors: ""};
+  state = {progress: 0, errors: "", preview: "", file: ""};
 
   fileInput = React.createRef();
-  alertText = React.createRef();
+  preview = React.createRef();
 
-  sendToCloudinary = (file) => {
+  sendToCloudinary = (file) => () => {
+    if (file === "") {
+      this.setState({errors: "please first select a file"});
+      return;
+    }
+
     let url = `https://api.cloudinary.com/v1_1/dol1mm8bd/auto/upload/`;
 
     let formData = new FormData();
@@ -25,7 +30,7 @@ export default class DropBox extends Component {
 
     return axios.post(url, formData, options).then(r => {
       console.log(r);
-      this.setState({progress: 0});
+      this.setState({progress: 0, preview: "", file: ""});
     });
   }
 
@@ -40,6 +45,7 @@ export default class DropBox extends Component {
   checkDimensions = async (file) => {
     let url = window.URL.createObjectURL(file);
     let img = await this.loadImage(url);
+    this.setState({preview: url});
     let height = img.naturalHeight;
     let width = img.naturalWidth;
     return height < 1000 && width < 1000;
@@ -68,24 +74,26 @@ export default class DropBox extends Component {
     console.log(file);
     console.log(`file is ${file.size} large`);
     this.checkImage(file).then(errors => {
-        if (errors) {this.setState({errors});}
-        else { this.sendToCloudinary(file); }
+        if (errors) {this.setState({errors, preview: ""});}
+        else {this.setState({errors: "", file});}
     });
-  }
-
-  componentDidMount() {
-    let el = this.alertText.current;
-    el.addEventListener('mouseover', () => el.classList.toggle('colortext'));
   }
 
 
   render() {
-    let {progress, errors} = this.state;
+    
+    let {progress, errors, preview, file} = this.state;
     let progressClass = progress > 0 ? "progress-bar" : "";
+    let checkErrors = (errors !== "") ? "none" : "inherit";
 
     return (
       <div className="dropzone">
           <div>{errors}</div>
+          <img
+            className='preview'
+            style={{display: `${checkErrors}`}}
+            src={preview}>
+          </img>
           <div
             className={progressClass}
             style={{width: `${progress}vw`}}>
@@ -101,12 +109,11 @@ export default class DropBox extends Component {
           <label htmlFor="file">
             Upload File
           </label>
-          <br />
-          <h1
-            className="colortext"
-            ref={this.alertText}
-            >Some Text
-          </h1>
+          <br/>
+          <button
+            onClick={this.sendToCloudinary(file)}>
+            Upload
+          </button>
         </div>
     );
   }

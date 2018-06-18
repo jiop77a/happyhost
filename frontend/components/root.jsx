@@ -13,7 +13,7 @@ const Root = () => {
   return (
     <div>
       <Dropbox/>
-      {`Hello World`}
+      {`Gallery goes here`}
     </div>
   );
 };
