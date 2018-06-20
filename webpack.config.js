@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require("webpack");
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: './frontend/index.jsx',
@@ -20,7 +21,7 @@ module.exports = {
   },
   devtool: 'source-map',
   plugins: [
-    new webpack.EnvironmentPlugin(['CLOUDINARY_PRESET'])
+    new Dotenv()
   ],
   resolve: {
     extensions: ['.js', '.jsx', '*']

@@ -1,24 +1,24 @@
 import React, {Component} from 'react';
 import {createImage} from '../util/imag_util';
 import Main from './main';
+import {happy} from '../imageIndex.js';
+import {BrowserRouter, Route, Link} from 'react-router-dom';
 
 
-const Root = () => {
-  // createImage()
-  //   .then(r => r.text())
-  //   .then(r => console.log(r));
-
-  // console.log(process.env.HELLO);
-
-  return (
+const Root = () => (
+  <BrowserRouter>
     <div>
       <nav>
-        <img src='https://res.cloudinary.com/dol1mm8bd/image/upload/v1529290873/qgdfes0qrx5vtmuevzzj.png'></img>
-        <div>Happy Host</div>
+        <Link to="/">
+          <img src={happy}></img>
+          <div>Happy Host</div>
+        </Link>
       </nav>
-      <Main/>
+      <Route exact path="/" component={Main}></Route>
+      <Route path="/image/:id" component={Main}></Route>
     </div>
-  );
-};
+  </BrowserRouter>
+);
+
 
 export default Root;

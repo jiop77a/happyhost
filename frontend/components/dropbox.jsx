@@ -1,14 +1,17 @@
 /*global Promise*/
 import React, { Component } from 'react';
 import axios from 'axios';
+import {upload} from '../imageIndex.js';
 
 export default class DropBox extends Component {
-  state = {progress: 0, errors: "", preview: "", file: ""};
+  constructor(props) {
+    super(props);
+    this.state = {progress: 0, errors: "", preview: "", file: ""};
+  }
 
   fileInput = React.createRef();
-  preview = React.createRef();
 
-  sendToCloudinary = (file) => () => {
+  sendToCloudinary = (file) => async () => {
     if (file === "") {
       this.setState({errors: "please first select a file"});
       return;
@@ -25,10 +28,9 @@ export default class DropBox extends Component {
     };
     let options = {headers, onUploadProgress};
 
-    return axios.post(url, formData, options).then(r => {
-      console.log(r);
-      this.setState({progress: 0, preview: "", file: ""});
-    });
+    let r = await axios.post(url, formData, options);
+    console.log(r);
+    this.setState({progress: 0, preview: "", file: ""});
   }
 
   loadImage(url) {
@@ -42,10 +44,11 @@ export default class DropBox extends Component {
   checkDimensions = async (file) => {
     let url = window.URL.createObjectURL(file);
     let img = await this.loadImage(url);
-    this.setState({preview: url});
     let height = img.naturalHeight;
     let width = img.naturalWidth;
-    return height < 1000 && width < 1000;
+    let condition = height < 1000 && width < 1000;
+    if (condition) {this.setState({preview: url, errors: ""});}
+    return condition;
   }
 
   checkImage = async (file) => {
@@ -66,16 +69,12 @@ export default class DropBox extends Component {
     return false;
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     let file = this.fileInput.current.files[0];
-    console.log(file);
-    console.log(`file is ${file.size} large`);
-    this.checkImage(file).then(errors => {
-        if (errors) {this.setState({errors, preview: ""});}
-        else {this.setState({errors: "", file});}
-    });
+    let errors = await this.checkImage(file);
+    if (errors) {this.setState({errors});}
+    else {this.setState({file});}
   }
-
 
   render() {
 
@@ -95,23 +94,12 @@ export default class DropBox extends Component {
             src={preview}>
           </img>
           <div className="progress-bar-container">
-            <div
-              className="progress-bar"
-              style={{width: `${progress}%`}}>
-            </div>
+            <div className="progress-bar" style={{width: `${progress}%`}}></div>
           </div>
-          <div
-            className="hide-text"
-            style={{display: `${checkHide}`}}>
-            <div
-              className="drop-text">
-              Drag or Drop Image</div>
-            <img
-              src={"http://res.cloudinary.com/dol1mm8bd/image/upload/v1529293787/k0b6lro6ho266godd4cr.png"}>
-            </img>
-            <div
-              className="drop-text"
-              >Or</div>
+          <div className="hide-text" style={{display: `${checkHide}`}}>
+            <div className="drop-text">Drag or Drop Image</div>
+            <img src={upload}></img>
+            <div className="drop-text">Or</div>
             <input
               id="file"
               type="file"
@@ -120,10 +108,7 @@ export default class DropBox extends Component {
               onChange={this.handleSubmit}
               accept={'.jpg, .png, .gif'}
             />
-            <label
-              htmlFor="file">
-              Click to Upload
-            </label>
+            <label htmlFor="file">Click to Upload</label>
           </div>
         </div>
         <button
@@ -131,6 +116,7 @@ export default class DropBox extends Component {
           onClick={this.sendToCloudinary(file)}>
           Upload Image
         </button>
+        <button onClick={this.props.addImage("d")}>Click</button>
       </div>
     );
   }

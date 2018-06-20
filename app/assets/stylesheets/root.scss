@@ -1,17 +1,24 @@
 nav {
   background-image: linear-gradient(-180deg, #76AFD8 0%, #4A90E2 100%);
   border: 1px solid #979797;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding-left: 3%;
   height: 92px;
-  div {
-    color: #FFFFFF;
-    font-family: AmericanTypewriter;
-    font-size: 36px;
-    text-align: center;
-    margin-left: 20px;
-    font-weight: 500;
+
+  a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 3%;
+    line-height: 92px;
+    cursor: pointer;
+    width: 320px;
+
+    div {
+      color: #FFFFFF;
+      font-family: AmericanTypewriter;
+      font-size: 36px;
+      text-align: center;
+      margin-left: 20px;
+      font-weight: 500;
+    }
   }
 }
