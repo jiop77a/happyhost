@@ -18,18 +18,18 @@ class Main extends Component {
   // }
 
   render() {
-    const addImage = (image) => () => {
-      let images = [...this.state.images, image];
-      this.setState({images});
-    };
+    // const addImage = (image) => () => {
+    //   let images = [...this.state.images, image];
+    //   this.setState({images});
+    // };
     return (
       <div className='main'>
         <h1>Welcome, Add your files here!</h1>
-        <Dropbox addImage={addImage}/>
+        <Dropbox/>
         {`Gallery goes here`}
-        {this.state.images.map(
+        {/* {this.state.images.map(
           (image, key) => <span key={key}>{image}</span>
-        )}
+        )} */}
       </div>
     );
   }

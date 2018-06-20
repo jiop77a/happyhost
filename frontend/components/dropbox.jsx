@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {upload} from '../imageIndex.js';
+import Dropzone from 'react-dropzone';
 
 export default class DropBox extends Component {
   constructor(props) {
@@ -10,6 +11,27 @@ export default class DropBox extends Component {
   }
 
   fileInput = React.createRef();
+  dropZone = React.createRef();
+
+  componentDidMount() {
+    this.dropZone.current.addEventListener('dragover', this.handleOver);
+    this.dropZone.current.addEventListener('dragleave', this.handleLeave);
+    this.dropZone.current.addEventListener('drop', this.handleDrop);
+  }
+  handleOver
+  handleEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log(e.nativeEvent);
+  }
+
+
+
 
   sendToCloudinary = (file) => async () => {
     if (file === "") {
@@ -70,6 +92,8 @@ export default class DropBox extends Component {
   }
 
   handleSubmit = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
     let file = this.fileInput.current.files[0];
     let errors = await this.checkImage(file);
     if (errors) {this.setState({errors});}
@@ -86,7 +110,10 @@ export default class DropBox extends Component {
 
     return (
       <div className="dropbox">
-        <div className="dropzone">
+        <div
+          className="dropzone"
+          ref={this.dropZone}
+          >
           <div className="errors">{errors}</div>
           <img
             className='preview'
@@ -116,7 +143,6 @@ export default class DropBox extends Component {
           onClick={this.sendToCloudinary(file)}>
           Upload Image
         </button>
-        <button onClick={this.props.addImage("d")}>Click</button>
       </div>
     );
   }
