@@ -7,10 +7,11 @@ import Dropzone from 'react-dropzone';
 export default class DropBox extends Component {
   constructor(props) {
     super(props);
-    this.state = {progress: 0, errors: "", preview: "", file: ""};
+    this.state = {progress: 0, errors: "", preview: "", file: "", hover: false};
   }
 
   dropZone = React.createRef();
+  upButton = React.createRef();
 
   makeFormData(file) {
     let formData = new FormData();
@@ -74,34 +75,51 @@ export default class DropBox extends Component {
   }
 
   handleSubmit = async (files) => {
+    this.setState({hover: false});
     let file = files[0];
     let url = file.preview;
     console.log(file);
     let errors = await this.checkImage(file, url);
-    if (errors) {this.setState({errors});}
-    else {this.setState({file});}
+    if (errors) this.setState({errors});
+    else this.setState({file});
+  }
+
+  onDragEnter = () => {
+    this.setState({hover: true});
+  }
+
+  onDragLeave = () => {
+      this.setState({hover: false});
   }
 
   render() {
 
-    let {progress, errors, preview, file} = this.state;
+    let {progress, errors, preview, file, hover} = this.state;
     let progressClass = progress > 0 ? "progress-bar" : "";
     let checkPreview = (preview === "") ? "none" : "inherit";
     let checkHide = (preview !== "") ? "none" : "inherit";
+    let checkHover = (hover) ? "flex" : "none";
 
 
     return (
       <div className="dropbox">
+        <div className="progress-bar-container">
+          <div className="progress-bar" style={{width: `${progress}%`}}></div>
+        </div>
         <Dropzone
           ref={this.dropZone}
           className="dropzone"
           disableClick={true}
           onDrop={files => this.handleSubmit(files)}
+          onDragEnter={this.onDragEnter}
+          onDragLeave={this.onDragLeave}
           >
-          <div className="errors">{errors}</div>
-          <div className="progress-bar-container">
-            <div className="progress-bar" style={{width: `${progress}%`}}></div>
+          <div
+            className="overlay"
+            style={{display: `${checkHover}`}}>
+            <div>Drop That File!</div>
           </div>
+          <div className="errors">{errors}</div>
           <img
             className='preview'
             style={{display: `${checkPreview}`}}
@@ -128,7 +146,8 @@ export default class DropBox extends Component {
         </Dropzone>
         <button
           className='drop-text drop-button'
-          onClick={this.sendToCloudinary(file)}>
+          onClick={this.sendToCloudinary(file)}
+          ref={this.upButton}>
           Upload Image
         </button>
       </div>
