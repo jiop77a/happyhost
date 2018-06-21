@@ -50,14 +50,14 @@ export default class DropBox extends Component {
     let img = await this.loadImage(url);
     let height = img.naturalHeight;
     let width = img.naturalWidth;
-    let condition = height < 1000 && width < 1000;
+    let condition = height < 2000 && width < 2000;
     if (condition) {this.setState({preview: url, errors: ""});}
     return condition;
   }
 
   checkImage = async (file, url) => {
     try {
-      if (file.size > 1250000) {
+      if (file.size > 2250000) {
         throw new Error('image is too big');
       }
       if (!['image/jpeg', 'image/gif', 'image/png'].includes(file.type)) {
@@ -99,14 +99,14 @@ export default class DropBox extends Component {
           onDrop={files => this.handleSubmit(files)}
           >
           <div className="errors">{errors}</div>
+          <div className="progress-bar-container">
+            <div className="progress-bar" style={{width: `${progress}%`}}></div>
+          </div>
           <img
             className='preview'
             style={{display: `${checkPreview}`}}
             src={preview}>
           </img>
-          <div className="progress-bar-container">
-            <div className="progress-bar" style={{width: `${progress}%`}}></div>
-          </div>
           <div className="hide-text" style={{display: `${checkHide}`}}>
             <div className="drop-text">Drag or Drop Image</div>
             <img src={upload}></img>
