@@ -11,7 +11,6 @@ export default class DropBox extends Component {
   }
 
   dropZone = React.createRef();
-  upButton = React.createRef();
 
   makeFormData(file) {
     let formData = new FormData();
@@ -52,15 +51,13 @@ export default class DropBox extends Component {
     let height = img.naturalHeight;
     let width = img.naturalWidth;
     let condition = height < 2000 && width < 2000;
-    if (condition) {this.setState({preview: url, errors: ""});}
+    if (condition) this.setState({preview: url, errors: ""});
     return condition;
   }
 
   checkImage = async (file, url) => {
     try {
-      if (file.size > 2250000) {
-        throw new Error('image is too big');
-      }
+      if (file.size > 2250000) throw new Error('image is too big');
       if (!['image/jpeg', 'image/gif', 'image/png'].includes(file.type)) {
         throw new Error('image is not the right type');
       }
@@ -78,28 +75,20 @@ export default class DropBox extends Component {
     this.setState({hover: false});
     let file = files[0];
     let url = file.preview;
-    console.log(file);
     let errors = await this.checkImage(file, url);
     if (errors) this.setState({errors});
     else this.setState({file});
   }
 
-  onDragEnter = () => {
-    this.setState({hover: true});
-  }
+  onDragEnter = () => this.setState({hover: true});
 
-  onDragLeave = () => {
-      this.setState({hover: false});
-  }
+  onDragLeave = () => this.setState({hover: false});
 
   render() {
-
     let {progress, errors, preview, file, hover} = this.state;
-    let progressClass = progress > 0 ? "progress-bar" : "";
     let checkPreview = (preview === "") ? "none" : "inherit";
     let checkHide = (preview !== "") ? "none" : "inherit";
     let checkHover = (hover) ? "flex" : "none";
-
 
     return (
       <div className="dropbox">
@@ -113,10 +102,8 @@ export default class DropBox extends Component {
           onDrop={files => this.handleSubmit(files)}
           onDragEnter={this.onDragEnter}
           onDragLeave={this.onDragLeave}
-          >
-          <div
-            className="overlay"
-            style={{display: `${checkHover}`}}>
+          accept={'.jpg, .png, .gif'}>
+          <div className="overlay" style={{display: `${checkHover}`}}>
             <div>Drop That File!</div>
           </div>
           <div className="errors">{errors}</div>
@@ -129,15 +116,6 @@ export default class DropBox extends Component {
             <div className="drop-text">Drag or Drop Image</div>
             <img src={upload}></img>
             <div className="drop-text">Or</div>
-            {/* <input
-              id="file"
-              type="file"
-              className="inputfile"
-              ref={this.fileInput}
-              onChange={this.handleSubmit}
-              accept={'.jpg, .png, .gif'}
-            /> */}
-            {/* <label htmlFor="file">Click to Upload</label> */}
             <label
               onClick={() => {this.dropZone.current.open();}}>
               Click to Upload

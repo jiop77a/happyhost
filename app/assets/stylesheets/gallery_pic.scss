@@ -1,0 +1,45 @@
+.gallery-pic {
+  width: 191px;
+  margin: 10px;
+}
+
+.pic-container {
+  position: relative;
+  height: 127px;
+}
+
+.image {
+  height: 100%;
+  width: 100%;
+}
+
+.ex {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  width: 10%;
+  cursor: pointer;
+}
+
+.views {
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+  background-color: rgba(41,41,41,0.7);
+  font-family: Tahoma;
+  font-size: 12px;
+  color: white;
+  width: 75%;
+  padding: 5px;
+  letter-spacing: .8px;
+}
+
+.url {
+  margin-top: 10px;
+  background: white;
+  border: 1px solid #979797;
+  font-family: Tahoma-bold;
+  font-size: 12px;
+  padding: 3px 0 5px 5px;
+  letter-spacing: .8px;
+}

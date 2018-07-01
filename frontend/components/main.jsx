@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {createImage} from '../util/imag_util';
 import Dropbox from './dropbox';
-
+import Gallery from './gallery';
 
 
 class Main extends Component {
@@ -26,7 +25,7 @@ class Main extends Component {
       <div className='main'>
         <h1>Welcome, Add your files here!</h1>
         <Dropbox/>
-        {`Gallery goes here`}
+        <Gallery/>
         {/* {this.state.images.map(
           (image, key) => <span key={key}>{image}</span>
         )} */}

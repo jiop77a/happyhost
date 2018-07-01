@@ -1,0 +1,12 @@
+.gallery {
+  width: 92%;
+  .title {
+    text-align: left;
+  }
+}
+
+.pics {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
