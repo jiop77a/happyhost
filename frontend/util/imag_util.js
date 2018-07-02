@@ -1,6 +1,5 @@
-export const createImage = () =>
-  fetch("silly", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ color: "red" })
-  });
+export const fetchImage = (id) => {
+  fetch(`http://localhost:3000/api/images/${id}`)
+  .then(r => r.json())
+  .then(r => console.log(r));
+};

@@ -5,3 +5,18 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+Image.delete_all
+
+
+8.times do
+  Image.create!(
+    url: 'https://res.cloudinary.com/dol1mm8bd/image/upload/v1529885719/default_pic_mqmdjz.jpg',
+    ip: '::1'
+  )
+end
+
+Image.create!(
+  url: 'https://res.cloudinary.com/dol1mm8bd/image/upload/v1529554873/Bitmap_a1vdlk.png',
+  ip: '123.123.123.123'
+)
