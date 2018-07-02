@@ -15,7 +15,7 @@ class Api::ImagesController < ApplicationController
   end
 
   def create
-    @image = Image.new(url: params[:url], ip: request.remote_ip)
+    @image = Image.new(url: image_params[:url], ip: request.remote_ip)
     if @image.save
       set_images
       render :index
