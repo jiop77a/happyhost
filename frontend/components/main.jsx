@@ -18,10 +18,9 @@ class Main extends Component {
   }
 
   render() {
-    // const addImage = (image) => () => {
-    //   let images = [...this.state.images, image];
-    //   this.setState({images});
-    // };
+    const addImage = (images) => {
+      this.setState({images});
+    };
 
     const deleteImage = (id) => () => {
       fetch(`http://localhost:3000/api/images/${id}`, {method: 'DELETE'})
@@ -32,7 +31,7 @@ class Main extends Component {
     return (
       <div className='main'>
         <h1>Welcome, Add your files here!</h1>
-        <Dropbox/>
+        <Dropbox add={addImage}/>
         <Gallery
           images={Object.values(this.state.images)}
           remove={deleteImage}

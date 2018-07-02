@@ -20,6 +20,23 @@ export default class DropBox extends Component {
     return formData;
   }
 
+  sendToDb = async (url) => {
+    let token = document.head.querySelector("[name=csrf-token]").content;
+    let formData = new FormData();
+    formData.append('image[url]', url);
+    let r = await fetch(`http://localhost:3000/api/images/`, {
+      method: 'POST',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-Token': token,
+      },
+      body: formData,
+      credentials: 'same-origin'
+    });
+    let response = await r.json();
+    return response;
+  };
+
   sendToCloudinary = (file) => async () => {
     if (file === "") {
       this.setState({errors: "please first select a file"}); return;
@@ -33,7 +50,8 @@ export default class DropBox extends Component {
     };
     let options = {headers, onUploadProgress};
     let r = await axios.post(url, formData, options);
-    console.log(r);
+    let db = await this.sendToDb(r.data.secure_url);
+    this.props.add(db);
     window.URL.revokeObjectURL(this.state.preview);
     this.setState({progress: 0, preview: "", file: ""});
   }
@@ -70,6 +88,7 @@ export default class DropBox extends Component {
     }
     return false;
   }
+
 
   handleSubmit = async (files) => {
     this.setState({hover: false});
